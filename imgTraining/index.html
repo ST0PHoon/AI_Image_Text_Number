@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://unpkg.com/axios@0.24.0/dist/axios.min.js"></script>
+</head>
+<body>
+    <center>
+        <h2> 고양이 이미지 분석 </h2>
+        <h4> 고양이 이미지를 업로드 해주세요. </h4>
+        <input type="file" id="fileInput">
+        <button id="uploadButton">upload</button><br>
+        <div>
+            <img id = "loadImage" src="#">
+        </div>
+        <div>
+            <p>고등어 <b id="catGoDeungEo"></b> %</p>
+            <p>페르시안 <b id="Peleusian"></b> %</p>
+            <p>러시안 불루 <b id="RussianBlue"></b> %</p>
+        </div>
+    </center>
+  <script>
+    document.getElementById("uploadButton").onclick = () => {
+      let fileElement = document.getElementById('fileInput')
+
+      // check if user had selected a file
+      if (fileElement.files.length === 0) {
+        alert('please choose a file')
+        return
+      }
+
+      let file = fileElement.files[0]
+
+      let formData = new FormData();
+      formData.set('file', file);
+
+      axios.post("http://192.168.23.108:8000/compare", formData, {
+        onUploadProgress: progressEvent => {
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+          console.log(`upload process: ${percentCompleted}%`);
+        }
+      })
+        .then(res => {
+          console.log(res.data)
+          var GoDeungEoPercent = document.getElementById('catGoDeungEo');
+          var PeleusianPercent = document.getElementById('Peleusian');
+          var RussianBluePercent = document.getElementById('RussianBlue');
+
+          GoDeungEoPercent.innerHTML = res.data.catGoDeungEo;
+          PeleusianPercent.innerHTML = res.data.Peleusian;
+          RussianBluePercent.innerHTML = res.data.RussianBlue;
+        })
+    }
+
+  </script>
+</body>
+</html>
