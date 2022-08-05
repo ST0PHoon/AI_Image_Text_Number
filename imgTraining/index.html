@@ -6,20 +6,18 @@
     <script src="https://unpkg.com/axios@0.24.0/dist/axios.min.js"></script>
 </head>
 <body>
-    <center>
+<center>
         <h2> 고양이 이미지 분석 </h2>
         <h4> 고양이 이미지를 업로드 해주세요. </h4>
-        <input type="file" id="fileInput">
+        <input type="file" id="fileInput" onchange="readURL(this);"><br>
+        <img id="preview">
         <button id="uploadButton">upload</button><br>
-        <div>
-            <img id = "loadImage" src="#">
-        </div>
         <div>
             <p>고등어 <b id="catGoDeungEo"></b> %</p>
             <p>페르시안 <b id="Peleusian"></b> %</p>
             <p>러시안 불루 <b id="RussianBlue"></b> %</p>
         </div>
-    </center>
+</center>
   <script>
     document.getElementById("uploadButton").onclick = () => {
       let fileElement = document.getElementById('fileInput')
@@ -53,8 +51,21 @@
           PeleusianPercent.innerHTML = res.data.Peleusian;
           RussianBluePercent.innerHTML = res.data.RussianBlue;
         })
-    }
+      }
 
+
+   <!--이미지 미리보기-->
+    function readURL(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('preview').src = e.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+      } else {
+        document.getElementById('preview').src = "";
+      }
+    }
   </script>
 </body>
 </html>
